@@ -21,6 +21,7 @@ public class StudentsMarksCalculator
         Student[] students = null;
         
         while (true) {
+            System.out.println("----------------------------------------------------------------------------------------");
             System.out.println("Student Marks Calculator");
             System.out.println("1. Read input from file");
             System.out.println("2. Print student marks");
@@ -28,6 +29,7 @@ public class StudentsMarksCalculator
             System.out.println("4. Sort marks and filter students");
             System.out.println("5. Exit");
             System.out.println("Enter task (1-5)");
+            System.out.println("-----------------------------------------------------------------------------------------\n");
             
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -46,7 +48,13 @@ public class StudentsMarksCalculator
                     }
                     break;
                 case 3:
-                    System.out.println("case 3");
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        System.out.println("Please enter the threshold: ");
+                        double thresholdMark = scanner.nextDouble();
+                        filterAndPrintMarks(students, thresholdMark);
+                    }
                     break;
                 case 4:
                     System.out.println("case 4");
@@ -77,8 +85,8 @@ public class StudentsMarksCalculator
     }
     
     private static Student[] readInputFromFile(String fileName) {
-    ArrayList<Student> studentList = new ArrayList<>();
-    String unitName = "";
+        ArrayList<Student> studentList = new ArrayList<>();
+        String unitName = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -104,6 +112,7 @@ public class StudentsMarksCalculator
                 }
     
                 String[] column = line.split(",");
+                
                 if (column.length >= 3) { // Ensure there are at least 3 fields: lastName, firstName, studentId
                     String lastName = column[0].trim();
                     String firstName = column[1].trim();
@@ -111,6 +120,7 @@ public class StudentsMarksCalculator
                     double[] marks = new double[3];
     
                     for (int i = 0; i < 3; i++) {
+            
                         if (i + 3 < column.length) { // Ensure index exists.
                             String mark = column[i + 3].trim();
                             if (!mark.isEmpty()) {
@@ -121,13 +131,17 @@ public class StudentsMarksCalculator
                                     marks[i] = 0.0; // Assign default value for invalid numbers
                                 }
                             } else {
-                                System.out.println("Warning: Empty mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                                //System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                                System.out.printf("Warning: Missing mark for %s %s (ID: %s) in Assignment %d\n", firstName, lastName, studentId, i + 1);                                
                                 marks[i] = 0.0; // Assign default value for empty marks
                             }
                         } else {
-                            System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                            //System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                            System.out.printf("Warning: Missing mark for %s %s (ID: %s) in Assignment %d\n", firstName, lastName, studentId, i + 1);                                
+
                             marks[i] = 0.0; // Assign default value for missing marks
                         }
+                        
                     }
     
                     studentList.add(new Student(lastName, firstName, studentId, marks));
@@ -139,31 +153,42 @@ public class StudentsMarksCalculator
             System.out.println("Error: " + e.getMessage());
             return null;
         }
-
-    System.out.println("Unit Name: " + unitName);
-    System.out.println("Number of students: " + studentList.size());
-    return studentList.toArray(new Student[0]);
-}
-
-private static void printMarks(Student[] students) {
-    System.out.println("\nStudent-wise marks:");
-    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
-    for (Student student : students) {
-        System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                student.lastName, student.firstName, student.studentId,
-                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+    
+        System.out.println("\n" + unitName);
+        System.out.println("Number of students: " + studentList.size() + "\n");
+        return studentList.toArray(new Student[0]);
     }
-}
 
-private static void filterAndPrintMarks(Student[] students, double threshold) {
-    System.out.println("\nStudents with total marks below " + threshold + ":");
-    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
-    for (Student student : students) {
-        System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                student.lastName, student.firstName, student.studentId,
-                student.marks[0], student.marks[1], student.marks[2], student.totalMark);      
+    private static void printMarks(Student[] students) {
+        System.out.println("\nStudent-wise marks:");
+        System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        for (Student student : students) {
+            System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                    student.lastName, student.firstName, student.studentId,
+                    student.marks[0], student.marks[1], student.marks[2], student.totalMark);
         }
     }
+
+    private static void filterAndPrintMarks(Student[] students, double thresholdMark) {
+        boolean entriesFound = false;
+        for (Student student : students) {
+            if (student.totalMark < thresholdMark) {
+                if (!entriesFound) {
+                    System.out.println("\nStudents with total marks below " + thresholdMark + ":");
+                    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+                    entriesFound = true;
+                }
+                System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                student.lastName, student.firstName, student.studentId,
+                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+            }
+        }
+        
+        if (!entriesFound) {
+            System.out.println("\nNo students have total marks below " + thresholdMark);
+        }
+    }
+
 }
 
     /**

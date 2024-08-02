@@ -8,6 +8,6 @@ comment2.params=fileName
 comment2.target=StudentsMarksCalculator.Student[]\ readInputFromFile(java.lang.String)
 comment3.params=students
 comment3.target=void\ printMarks(StudentsMarksCalculator.Student[])
-comment4.params=students\ threshold
+comment4.params=students\ thresholdMark
 comment4.target=void\ filterAndPrintMarks(StudentsMarksCalculator.Student[],\ double)
 numComments=5
