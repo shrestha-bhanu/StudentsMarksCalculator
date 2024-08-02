@@ -147,11 +147,22 @@ public class StudentsMarksCalculator
 
 private static void printMarks(Student[] students) {
     System.out.println("\nStudent-wise marks:");
-            System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
     for (Student student : students) {
         System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
                 student.lastName, student.firstName, student.studentId,
                 student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+    }
+}
+
+private static void filterAndPrintMarks(Student[] students, double threshold) {
+    System.out.println("\nStudents with total marks below " + threshold + ":");
+    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+    for (Student student : students) {
+        System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                student.lastName, student.firstName, student.studentId,
+                student.marks[0], student.marks[1], student.marks[2], student.totalMark);      
+        }
     }
 }
 
@@ -161,5 +172,4 @@ private static void printMarks(Student[] students) {
      * @param  y  a sample parameter for a method
      * @return    the sum of x and y
      */
- 
-}
+
