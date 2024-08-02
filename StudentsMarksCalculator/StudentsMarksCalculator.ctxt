@@ -6,4 +6,6 @@ comment1.target=void\ main(java.lang.String[])
 comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ StudentsMarksCalculator\r\n
 comment2.params=fileName
 comment2.target=StudentsMarksCalculator.Student[]\ readInputFromFile(java.lang.String)
-numComments=3
+comment3.params=students
+comment3.target=void\ printMarks(StudentsMarksCalculator.Student[])
+numComments=4

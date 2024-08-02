@@ -39,7 +39,11 @@ public class StudentsMarksCalculator
                     students = readInputFromFile(fileName);
                     break;
                 case 2:
-                    System.out.println("case 2");
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        printMarks(students);
+                    }
                     break;
                 case 3:
                     System.out.println("case 3");
@@ -76,68 +80,79 @@ public class StudentsMarksCalculator
     ArrayList<Student> studentList = new ArrayList<>();
     String unitName = "";
 
-    try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-        String line;
-        boolean firstLine = true;
-        boolean isHeaderSkipped = false;
-
-        while ((line = br.readLine()) != null) {
-            if (line.startsWith("#")) {
-                continue; // Skip comments.
-            }
-
-            if (firstLine) {
-                unitName = line.trim();
-                firstLine = false;
-                continue;
-            }
-
-            // Skip header row
-            if (!isHeaderSkipped) {
-                isHeaderSkipped = true;
-                continue;
-            }
-
-            String[] column = line.split(",");
-            if (column.length >= 3) { // Ensure there are at least 3 fields: lastName, firstName, studentId
-                String lastName = column[0].trim();
-                String firstName = column[1].trim();
-                String studentId = column[2].trim();
-                double[] marks = new double[3];
-
-                for (int i = 0; i < 3; i++) {
-                    if (i + 3 < column.length) { // Ensure index exists.
-                        String mark = column[i + 3].trim();
-                        if (!mark.isEmpty()) {
-                            try {
-                                marks[i] = Double.parseDouble(mark);
-                            } catch (NumberFormatException e) {
-                                System.out.println("Error: Invalid mark '" + mark + "' for " + firstName + " " + lastName + " (ID: " + studentId + ")");
-                                marks[i] = 0.0; // Assign default value for invalid numbers
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            boolean firstLine = true;
+            boolean isHeaderSkipped = false;
+    
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    continue; // Skip comments.
+                }
+                
+                // Skip first line
+                if (firstLine) {
+                    unitName = line.trim();
+                    firstLine = false;
+                    continue;
+                }
+    
+                // Skip heading row
+                if (!isHeaderSkipped) {
+                    isHeaderSkipped = true;
+                    continue;
+                }
+    
+                String[] column = line.split(",");
+                if (column.length >= 3) { // Ensure there are at least 3 fields: lastName, firstName, studentId
+                    String lastName = column[0].trim();
+                    String firstName = column[1].trim();
+                    String studentId = column[2].trim();
+                    double[] marks = new double[3];
+    
+                    for (int i = 0; i < 3; i++) {
+                        if (i + 3 < column.length) { // Ensure index exists.
+                            String mark = column[i + 3].trim();
+                            if (!mark.isEmpty()) {
+                                try {
+                                    marks[i] = Double.parseDouble(mark);
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Error: Invalid mark '" + mark + "' for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                                    marks[i] = 0.0; // Assign default value for invalid numbers
+                                }
+                            } else {
+                                System.out.println("Warning: Empty mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                                marks[i] = 0.0; // Assign default value for empty marks
                             }
                         } else {
-                            System.out.println("Warning: Empty mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
-                            marks[i] = 0.0; // Assign default value for empty marks
+                            System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                            marks[i] = 0.0; // Assign default value for missing marks
                         }
-                    } else {
-                        System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
-                        marks[i] = 0.0; // Assign default value for missing marks
                     }
+    
+                    studentList.add(new Student(lastName, firstName, studentId, marks));
+                } else {
+                    System.out.println("Error: Insufficient data on line: " + line);
                 }
-
-                studentList.add(new Student(lastName, firstName, studentId, marks));
-            } else {
-                System.out.println("Error: Insufficient data on line: " + line);
             }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
         }
-    } catch (IOException e) {
-        System.out.println("Error: " + e.getMessage());
-        return null;
-    }
 
     System.out.println("Unit Name: " + unitName);
     System.out.println("Number of students: " + studentList.size());
     return studentList.toArray(new Student[0]);
+}
+
+private static void printMarks(Student[] students) {
+    System.out.println("\nStudent-wise marks:");
+            System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+    for (Student student : students) {
+        System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                student.lastName, student.firstName, student.studentId,
+                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+    }
 }
 
     /**
