@@ -85,14 +85,14 @@ public class StudentsMarksCalculator
                     } else {
                         System.out.println("Please enter the threshold mark: ");
                         double thresholdMark = scanner.nextDouble();
-                        filterAndPrintMarks(students, thresholdMark);
+                        filterAndPrintMarksBelowThreshold(students, thresholdMark);
                     }
                     break;
                 case 4:
                     if (students == null) {
                         System.out.println("Please select a file first.");
                     } else {
-                        sortMarksAndFilterStudents(students);
+                        sortMarksAndFilterFiveTopBottomStudents(students);
                     }
                     break;
                 case 5:
@@ -262,7 +262,7 @@ public class StudentsMarksCalculator
      * @param  students  Array of Student objects
      * @param    thresholdMark the threshold mark input provided by the user
      */
-    private static void filterAndPrintMarks(Student[] students, double thresholdMark) {
+    private static void filterAndPrintMarksBelowThreshold(Student[] students, double thresholdMark) {
         // flag to check if students are found below the threshold
         boolean entriesFound = false;
         
@@ -305,7 +305,7 @@ public class StudentsMarksCalculator
      *
      * @param  students  Array of Student objects
      */
-    private static void sortMarksAndFilterStudents(Student[] students) {
+    private static void sortMarksAndFilterFiveTopBottomStudents(Student[] students) {
         
         // Using bubble sort algorithm to sort students by total mark in descending order
         for (int i =0; i < students.length -1; i++) {
