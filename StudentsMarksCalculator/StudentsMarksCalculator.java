@@ -21,7 +21,7 @@ public class StudentsMarksCalculator
         Student[] students = null;
         
         while (true) {
-            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.println("Student Marks Calculator");
             System.out.println("1. Read input from file");
             System.out.println("2. Print student marks");
@@ -29,7 +29,7 @@ public class StudentsMarksCalculator
             System.out.println("4. Sort marks and filter students");
             System.out.println("5. Exit");
             System.out.println("Enter task (1-5)");
-            System.out.println("-----------------------------------------------------------------------------------------\n");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -57,7 +57,11 @@ public class StudentsMarksCalculator
                     }
                     break;
                 case 4:
-                    System.out.println("case 4");
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        sortMarksAndFilterStudents(students);
+                    }
                     break;
                 case 5:
                     System.out.println("Exiting the program. Thank you");
@@ -164,8 +168,8 @@ public class StudentsMarksCalculator
         System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
         for (Student student : students) {
             System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                    student.lastName, student.firstName, student.studentId,
-                    student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+                student.lastName, student.firstName, student.studentId,
+                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
         }
     }
 
@@ -179,8 +183,8 @@ public class StudentsMarksCalculator
                     entriesFound = true;
                 }
                 System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                student.lastName, student.firstName, student.studentId,
-                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+                    student.lastName, student.firstName, student.studentId,
+                    student.marks[0], student.marks[1], student.marks[2], student.totalMark);
             }
         }
         
@@ -188,8 +192,38 @@ public class StudentsMarksCalculator
             System.out.println("\nNo students have total marks below " + thresholdMark);
         }
     }
+    
+    private static void sortMarksAndFilterStudents(Student[] students) {
+        for (int i =0; i < students.length -1; i++) {
+            for (int j=0; j < students.length - i - 1; j++) {
+                if (students[j].totalMark < students[j+1].totalMark) {
+                    Student temp = students[j];
+                    students[j] = students[j+1];
+                    students[j+1] = temp;
+                }
+            }
+        }
+        
+        System.out.println("\nTop 5 students with highest marks:");
+        System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        for (int i=0; i < Math.min(5, students.length); i++) {
+            System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                students[i].lastName, students[i].firstName, students[i].studentId, students[i].marks[0], students[i].marks[1], students[i].marks[2], students[i].totalMark);
+
+        }
+        
+        System.out.println("\nTop 5 students with lowest marks:");
+        System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        for (int i=students.length - 1; i >= Math.max(0, students.length - 5); i--) {
+            System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
+                students[i].lastName, students[i].firstName, students[i].studentId, students[i].marks[0], students[i].marks[1], students[i].marks[2], students[i].totalMark);
+
+        }
+    }
 
 }
+
+
 
     /**
      * An example of a method - replace this comment with your own
