@@ -1,7 +1,8 @@
-import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
+import java.util.Scanner;
 import java.util.ArrayList;
 /**
  * StudentsMarksCalculator class
@@ -44,6 +45,7 @@ public class StudentsMarksCalculator
             // Handle user choice based on the each menu option
             switch (choice) {
                 case 1:
+                    listFiles();
                     System.out.println("Enter the file name: ");
                     fileName = scanner.nextLine();
                     students = readInputFromFile(fileName);
@@ -80,6 +82,23 @@ public class StudentsMarksCalculator
         }
     }
     
+    private static void listFiles() {
+        // List available CSV files in the directory
+        File folder = new File(".");
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
+        
+        if (listOfFiles == null || listOfFiles.length == 0) {
+            System.out.println("No files found. The directory is empty.");
+        } else {
+            System.out.println("List of CSV files in the directory:");
+            for (File file : listOfFiles) {
+                System.out.println(file.getName());
+            }
+        }
+        
+
+    }
+    
     /**
      * static Student class
      * Contains all student details and marks
@@ -103,6 +122,7 @@ public class StudentsMarksCalculator
         }
     }
     
+    
     /**
      * Read student's datas from a file that already exists in the root folder.
      *
@@ -110,7 +130,7 @@ public class StudentsMarksCalculator
      * @return    Array of Student objects
      */
     private static Student[] readInputFromFile(String fileName) {
-        // creating an ArrayList of Student objects
+        // Creating an ArrayList of Student objects
         ArrayList<Student> studentList = new ArrayList<>();
         String unitName = "";
 
