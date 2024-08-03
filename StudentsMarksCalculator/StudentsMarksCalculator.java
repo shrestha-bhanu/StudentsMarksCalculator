@@ -281,9 +281,12 @@ public class StudentsMarksCalculator
      * @param  students  Array of Student objects
      */
     private static void sortMarksAndFilterStudents(Student[] students) {
+        
+        // Using bubble sort algorithm to sort students by total mark in descending order
         for (int i =0; i < students.length -1; i++) {
             for (int j=0; j < students.length - i - 1; j++) {
                 if (students[j].totalMark < students[j+1].totalMark) {
+                    // Swap students if they are in the wrong order
                     Student temp = students[j];
                     students[j] = students[j+1];
                     students[j+1] = temp;
@@ -291,16 +294,26 @@ public class StudentsMarksCalculator
             }
         }
         
+        // Print top 5 students with highest mark
         System.out.println("\nTop 5 students with highest marks:");
+        
+        // Print header
         System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        
+        // Itereate through students and print details of top 5 students
         for (int i=0; i < Math.min(5, students.length); i++) {
             System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
                 students[i].lastName, students[i].firstName, students[i].studentId, students[i].marks[0], students[i].marks[1], students[i].marks[2], students[i].totalMark);
 
         }
         
+        // Print top 5 students with lowest mark
         System.out.println("\nTop 5 students with lowest marks:");
+        
+        // Print header
         System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        
+        // Iterate through students and print details of bottom 5 students
         for (int i=students.length - 1; i >= Math.max(0, students.length - 5); i--) {
             System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
                 students[i].lastName, students[i].firstName, students[i].studentId, students[i].marks[0], students[i].marks[1], students[i].marks[2], students[i].totalMark);
