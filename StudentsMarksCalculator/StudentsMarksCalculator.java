@@ -14,91 +14,6 @@ import java.util.ArrayList;
  */
 public class StudentsMarksCalculator
 {
-
-    /**
-     * Main method of the program
-     * Implements a menu interface for user interaction
-     */
-    public static void main(String[] args) {
-        // Initialize scanner for user input and store in a var to easily access when neeeded.
-        Scanner scanner = new Scanner(System.in);
-        String fileName = "";
-        Student[] students = null;
-        
-        // Menu loop        
-        while (true) {
-            // Print menu options on display
-            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.println("Student Marks Calculator");
-            System.out.println("1. Read input from file");
-            System.out.println("2. Print student marks");
-            System.out.println("3. Print marks below threshold");
-            System.out.println("4. Sort marks and filter students");
-            System.out.println("5. Exit");
-            System.out.println("Enter task (1-5)");
-            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-            
-            // Store user choice
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            
-            // Handle user choice based on the each menu option
-            switch (choice) {
-                case 1:
-                    listFiles();
-                    System.out.println("Enter the file name: ");
-                    fileName = scanner.nextLine();
-                    students = readInputFromFile(fileName);
-                    break;
-                case 2:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        printMarks(students);
-                    }
-                    break;
-                case 3:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        System.out.println("Please enter the threshold: ");
-                        double thresholdMark = scanner.nextDouble();
-                        filterAndPrintMarks(students, thresholdMark);
-                    }
-                    break;
-                case 4:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        sortMarksAndFilterStudents(students);
-                    }
-                    break;
-                case 5:
-                    System.out.println("Exiting the program. Thank you");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid task. Please try again.");
-            }
-        }
-    }
-    
-    private static void listFiles() {
-        // List available CSV files in the directory
-        File folder = new File(".");
-        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
-        
-        if (listOfFiles == null || listOfFiles.length == 0) {
-            System.out.println("No files found. The directory is empty.");
-        } else {
-            System.out.println("List of CSV files in the directory:");
-            for (File file : listOfFiles) {
-                System.out.println(file.getName());
-            }
-        }
-        
-
-    }
-    
     /**
      * static Student class
      * Contains all student details and marks
@@ -120,6 +35,96 @@ public class StudentsMarksCalculator
             this.marks = marks;
             this.totalMark = marks[0] + marks[1] + marks[2];
         }
+    }
+
+    /**
+     * Main method of the program
+     * Implements a menu interface for user interaction
+     */
+    public static void main(String[] args) {
+        // Initialize scanner for user input and store in a var to easily access when neeeded.
+        Scanner scanner = new Scanner(System.in);
+        String fileName = "";
+        Student[] students = null;
+        
+        // Menu loop        
+        while (true) {
+            // Print menu options on display
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("Student Marks Calculator");
+            System.out.println("Choose task. Enter a number (1-5)");
+            System.out.println("1. Read input from file");
+            System.out.println("2. Print all student details and marks");
+            System.out.println("3. Print students details and marks below the threshold mark");
+            System.out.println("4. Sort marks and filter students by total marks (Top 5 & Bottom 5)");
+            System.out.println("5. Exit");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            
+            // Store user choice
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            
+            // Handle user choice based on the each menu option
+            switch (choice) {
+                case 1:
+                    listFiles();
+                    System.out.println("\nEnter the file name: ");
+                    fileName = scanner.nextLine();
+                    students = readInputFromFile(fileName);
+                    break;
+                case 2:
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        printMarks(students);
+                    }
+                    break;
+                case 3:
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        System.out.println("Please enter the threshold mark: ");
+                        double thresholdMark = scanner.nextDouble();
+                        filterAndPrintMarks(students, thresholdMark);
+                    }
+                    break;
+                case 4:
+                    if (students == null) {
+                        System.out.println("Please select a file first.");
+                    } else {
+                        sortMarksAndFilterStudents(students);
+                    }
+                    break;
+                case 5:
+                    System.out.println("Exiting the program. Thank you");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid task. Please try again.");
+            }
+        }
+    }
+    
+    /**
+     * List files available in the project directory.
+     *
+     */
+    private static void listFiles() {
+        // List available CSV files in the directory
+        File folder = new File(".");
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
+        
+        // Check if files exist or not
+        if (listOfFiles == null || listOfFiles.length == 0) {
+            
+            // Print message if no files exist
+            System.out.println("\nNo files found. The directory is empty.");
+        } else {
+            System.out.println("\nList of CSV files in the directory:");
+            // Iterate through the files found and print each file name.
+            for (File file : listOfFiles) {
+                System.out.println(file.getName());
+            }
+        }  
     }
     
     

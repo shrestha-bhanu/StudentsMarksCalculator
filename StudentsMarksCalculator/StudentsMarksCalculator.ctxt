@@ -6,6 +6,7 @@ comment1.target=void\ main(java.lang.String[])
 comment1.text=\r\n\ Main\ method\ of\ the\ program\r\n\ Implements\ a\ menu\ interface\ for\ user\ interaction\r\n
 comment2.params=
 comment2.target=void\ listFiles()
+comment2.text=\r\n\ List\ files\ available\ in\ the\ project\ directory.\r\n\r\n
 comment3.params=fileName
 comment3.target=StudentsMarksCalculator.Student[]\ readInputFromFile(java.lang.String)
 comment3.text=\r\n\ Read\ student's\ datas\ from\ a\ file\ that\ already\ exists\ in\ the\ root\ folder.\r\n\r\n\ @param\ \ filename\ \ Name\ of\ the\ file\ to\ read\ the\ data\ from\r\n\ @return\ \ \ \ Array\ of\ Student\ objects\r\n
