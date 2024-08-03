@@ -4,23 +4,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 /**
- * Write a description of class StudentsMarksCalculator here.
+ * StudentsMarksCalculator class
+ * This class handles various calculations on student marks such as reading data from a file, printing marks,
+ * filtering marks based on a given threshold, and sorting the top 5 highest and lowest marks.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Bhanu Pratap Shrestha
+ * @version (3 August 2024)
  */
 public class StudentsMarksCalculator
 {
 
     /**
-     * Constructor for objects of class StudentsMarksCalculator
+     * Main method of the program
+     * Implements a menu interface for user interaction
      */
     public static void main(String[] args) {
+        // Initialize scanner for user input and store in a var to easily access when neeeded.
         Scanner scanner = new Scanner(System.in);
         String fileName = "";
         Student[] students = null;
         
+        // Menu loop        
         while (true) {
+            // Print menu options on display
             System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             System.out.println("Student Marks Calculator");
             System.out.println("1. Read input from file");
@@ -31,9 +37,11 @@ public class StudentsMarksCalculator
             System.out.println("Enter task (1-5)");
             System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             
+            // Store user choice
             int choice = scanner.nextInt();
             scanner.nextLine();
             
+            // Handle user choice based on the each menu option
             switch (choice) {
                 case 1:
                     System.out.println("Enter the file name: ");
@@ -72,14 +80,21 @@ public class StudentsMarksCalculator
         }
     }
     
+    /**
+     * static Student class
+     * Contains all student details and marks
+     */
     static class Student {
+        // student attributes
         String lastName;
         String firstName;
         String studentId;
         double[] marks;
         double totalMark;
         
+        // constructor
         public Student(String lastName, String firstName, String studentId, double[] marks) {
+            // initialize student details
             this.lastName = lastName;
             this.firstName = firstName;
             this.studentId = studentId;
@@ -88,7 +103,14 @@ public class StudentsMarksCalculator
         }
     }
     
+    /**
+     * Read student's datas from a file that already exists in the root folder.
+     *
+     * @param  filename  Name of the file to read the data from
+     * @return    Array of Student objects
+     */
     private static Student[] readInputFromFile(String fileName) {
+        // creating an ArrayList of Student objects
         ArrayList<Student> studentList = new ArrayList<>();
         String unitName = "";
 
@@ -99,100 +121,165 @@ public class StudentsMarksCalculator
     
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("#")) {
-                    continue; // Skip comments.
+                    continue; // Skip comments starting with #
                 }
                 
-                // Skip first line
+                // Get unit name from the first line
                 if (firstLine) {
                     unitName = line.trim();
                     firstLine = false;
                     continue;
                 }
     
-                // Skip heading row
+                // Skip the header line (2nd line) after the unit name line
                 if (!isHeaderSkipped) {
                     isHeaderSkipped = true;
                     continue;
                 }
-    
+                
+                // Split the line and store them in columns array
                 String[] column = line.split(",");
                 
-                if (column.length >= 3) { // Ensure there are at least 3 fields: lastName, firstName, studentId
+                // Check at least 3 fields: lastName, firstName, studentId exist
+                if (column.length >= 3) {
                     String lastName = column[0].trim();
                     String firstName = column[1].trim();
                     String studentId = column[2].trim();
                     double[] marks = new double[3];
-    
+                    
+                    //Loop the three assignment marks
                     for (int i = 0; i < 3; i++) {
-            
-                        if (i + 3 < column.length) { // Ensure index exists.
+                        // Check if the mark column exists (to resolve the ArrayOutofBoundsException error)
+                        if (i + 3 < column.length) {
                             String mark = column[i + 3].trim();
                             if (!mark.isEmpty()) {
                                 try {
                                     marks[i] = Double.parseDouble(mark);
                                 } catch (NumberFormatException e) {
+                                    // Handle invalid mark
                                     System.out.println("Error: Invalid mark '" + mark + "' for " + firstName + " " + lastName + " (ID: " + studentId + ")");
                                     marks[i] = 0.0; // Assign default value for invalid numbers
                                 }
                             } else {
-                                //System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                                // Handle missing mark column
                                 System.out.printf("Warning: Missing mark for %s %s (ID: %s) in Assignment %d\n", firstName, lastName, studentId, i + 1);                                
-                                marks[i] = 0.0; // Assign default value for empty marks
+                                marks[i] = 0.0; // Assign default value for missing marks
                             }
                         } else {
-                            //System.out.println("Warning: Missing mark for " + firstName + " " + lastName + " (ID: " + studentId + ")");
+                            //Handle missing mark column
                             System.out.printf("Warning: Missing mark for %s %s (ID: %s) in Assignment %d\n", firstName, lastName, studentId, i + 1);                                
 
                             marks[i] = 0.0; // Assign default value for missing marks
                         }
                         
                     }
-    
+                    // Create and add new Student object to the studentList
                     studentList.add(new Student(lastName, firstName, studentId, marks));
                 } else {
+                    // Handle insufficient data 
                     System.out.println("Error: Insufficient data on line: " + line);
                 }
             }
         } catch (IOException e) {
+            // Handle file reading errors
             System.out.println("Error: " + e.getMessage());
             return null;
         }
-    
+        
+        // Print unit name and number of students from the file
         System.out.println("\n" + unitName);
         System.out.println("Number of students: " + studentList.size() + "\n");
+        
+        // Convert ArrayList to array and return
         return studentList.toArray(new Student[0]);
     }
-
+    
+    /**
+     * After reading the file, this method prints marks for all students
+     *
+     * @param  students  Array of Student objects
+     */
     private static void printMarks(Student[] students) {
+        // Print a title for the student marks list
         System.out.println("\nStudent-wise marks:");
-        System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+        
+        // print column headers with formatted string
+        // %-30s: Left-aligned string, 30 characters wide
+        // %-20s: Left-aligned string, 20 characters wide
+        // %s: String
+        // \t: Tab character for additional spacing
+        System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n",
+            "Last Name", 
+            "First Name",
+            "Student ID",
+            "Assignment 1",
+            "Assignment 2",
+            "Assignment 3",
+            "Total Mark");
+        
+        // Iterate through each student in the array
         for (Student student : students) {
+            // Print each student details and marks
             System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                student.lastName, student.firstName, student.studentId,
-                student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+                student.lastName, 
+                student.firstName, 
+                student.studentId,
+                student.marks[0], 
+                student.marks[1], 
+                student.marks[2], 
+                student.totalMark);
         }
     }
-
+    
+    /**
+     * Filters and prints students with marks below a threshold value
+     *
+     * @param  students  Array of Student objects
+     * @param    thresholdMark the threshold mark input provided by the user
+     */
     private static void filterAndPrintMarks(Student[] students, double thresholdMark) {
+        // flag to check if students are found below the threshold
         boolean entriesFound = false;
+        
+        // Iterate through each student in the array
         for (Student student : students) {
+            // Check if the student's mark is below threshold
             if (student.totalMark < thresholdMark) {
+                // If this is the first entry below threshold print headers
                 if (!entriesFound) {
                     System.out.println("\nStudents with total marks below " + thresholdMark + ":");
-                    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n","Last Name", "First Name","Student ID","Assignment 1","Assignment 2","Assignment 3","Total Mark");
+                    System.out.printf("%-30s %-20s\t%s\t%s\t\t%s\t\t%s\t\t%s\n",
+                        "Last Name", 
+                        "First Name",
+                        "Student ID",
+                        "Assignment 1",
+                        "Assignment 2",
+                        "Assignment 3",
+                        "Total Mark");
                     entriesFound = true;
                 }
                 System.out.printf("%-30s %-20s\t%s\t%.2f\t\t\t%.2f\t\t\t%.2f\t\t\t%.2f\n",
-                    student.lastName, student.firstName, student.studentId,
-                    student.marks[0], student.marks[1], student.marks[2], student.totalMark);
+                    student.lastName, 
+                    student.firstName, 
+                    student.studentId,
+                    student.marks[0], 
+                    student.marks[1], 
+                    student.marks[2], 
+                    student.totalMark);
             }
         }
         
+        // If no students were found below the given threshold print a message
         if (!entriesFound) {
-            System.out.println("\nNo students have total marks below " + thresholdMark);
+            System.out.println("\nSorry, no entries found! No students have total marks below " + thresholdMark);
         }
     }
     
+    /**
+     * Sort students by total marks and print the top 5 and bottom 5 student data
+     *
+     * @param  students  Array of Student objects
+     */
     private static void sortMarksAndFilterStudents(Student[] students) {
         for (int i =0; i < students.length -1; i++) {
             for (int j=0; j < students.length - i - 1; j++) {
@@ -222,13 +309,3 @@ public class StudentsMarksCalculator
     }
 
 }
-
-
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-

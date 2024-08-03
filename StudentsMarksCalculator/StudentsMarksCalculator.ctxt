@@ -1,15 +1,19 @@
 #BlueJ class context
 comment0.target=StudentsMarksCalculator
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ StudentsMarksCalculator\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ StudentsMarksCalculator\ class\r\n\ This\ class\ handles\ various\ calculations\ on\ student\ marks\ such\ as\ reading\ data\ from\ a\ file,\ printing\ marks,\r\n\ filtering\ marks\ based\ on\ a\ given\ threshold,\ and\ sorting\ the\ top\ 5\ highest\ and\ lowest\ marks.\r\n\r\n\ @author\ Bhanu\ Pratap\ Shrestha\r\n\ @version\ (3\ August\ 2024)\r\n
 comment1.params=args
 comment1.target=void\ main(java.lang.String[])
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ StudentsMarksCalculator\r\n
+comment1.text=\r\n\ Main\ method\ of\ the\ program\r\n\ Implements\ a\ menu\ interface\ for\ user\ interaction\r\n
 comment2.params=fileName
 comment2.target=StudentsMarksCalculator.Student[]\ readInputFromFile(java.lang.String)
+comment2.text=\r\n\ Read\ student's\ datas\ from\ a\ file\ that\ already\ exists\ in\ the\ root\ folder.\r\n\r\n\ @param\ \ filename\ \ Name\ of\ the\ file\ to\ read\ the\ data\ from\r\n\ @return\ \ \ \ Array\ of\ Student\ objects\r\n
 comment3.params=students
 comment3.target=void\ printMarks(StudentsMarksCalculator.Student[])
+comment3.text=\r\n\ After\ reading\ the\ file,\ this\ method\ prints\ marks\ for\ all\ students\r\n\r\n\ @param\ \ students\ \ Array\ of\ Student\ objects\r\n
 comment4.params=students\ thresholdMark
 comment4.target=void\ filterAndPrintMarks(StudentsMarksCalculator.Student[],\ double)
+comment4.text=\r\n\ Filters\ and\ prints\ students\ with\ marks\ below\ a\ threshold\ value\r\n\r\n\ @param\ \ students\ \ Array\ of\ Student\ objects\r\n\ @param\ \ \ \ thresholdMark\ the\ threshold\ mark\ input\ provided\ by\ the\ user\r\n
 comment5.params=students
 comment5.target=void\ sortMarksAndFilterStudents(StudentsMarksCalculator.Student[])
+comment5.text=\r\n\ Sort\ students\ by\ total\ marks\ and\ print\ the\ top\ 5\ and\ bottom\ 5\ student\ data\r\n\r\n\ @param\ \ students\ \ Array\ of\ Student\ objects\r\n
 numComments=6
