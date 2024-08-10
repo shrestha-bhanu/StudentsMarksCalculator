@@ -18,7 +18,7 @@ public class StudentsMarksCalculator
      * static Student class
      * Contains all student details and marks
      */
-    static class Student {
+    public static class Student {
         // student attributes
         String lastName;
         String firstName;
@@ -108,7 +108,7 @@ public class StudentsMarksCalculator
      * List files available in the project directory.
      *
      */
-    private static void listFiles() {
+    public static void listFiles() {
         // List available CSV files in the directory
         File folder = new File(".");
         File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".csv"));
@@ -134,7 +134,7 @@ public class StudentsMarksCalculator
      * @param  filename  Name of the file to read the data from
      * @return    Array of Student objects
      */
-    private static Student[] readInputFromFile(String fileName) {
+    public static Student[] readInputFromFile(String fileName) {
         // Creating an ArrayList of Student objects
         ArrayList<Student> studentList = new ArrayList<>();
         String unitName = "";
@@ -224,7 +224,7 @@ public class StudentsMarksCalculator
      *
      * @param  students  Array of Student objects
      */
-    private static void printMarks(Student[] students) {
+    public static void printMarks(Student[] students) {
         // Print a title for the student marks list
         System.out.println("\nStudent-wise marks:");
         
@@ -262,7 +262,7 @@ public class StudentsMarksCalculator
      * @param  students  Array of Student objects
      * @param    thresholdMark the threshold mark input provided by the user
      */
-    private static void filterAndPrintMarksBelowThreshold(Student[] students, double thresholdMark) {
+    public static void filterAndPrintMarksBelowThreshold(Student[] students, double thresholdMark) {
         // flag to check if students are found below the threshold
         boolean entriesFound = false;
         
@@ -305,7 +305,7 @@ public class StudentsMarksCalculator
      *
      * @param  students  Array of Student objects
      */
-    private static void sortMarksAndFilterFiveTopBottomStudents(Student[] students) {
+    public static void sortMarksAndFilterFiveTopBottomStudents(Student[] students) {
         
         // Using bubble sort algorithm to sort students by total mark in descending order
         for (int i =0; i < students.length -1; i++) {
