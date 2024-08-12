@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+
 /**
  * StudentsMarksCalculator class
  * This class handles various calculations on student marks such as reading data from a file, printing marks,
@@ -42,67 +44,93 @@ public class StudentsMarksCalculator
      * Implements a menu interface for user interaction
      */
     public static void main(String[] args) {
-        // Initialize scanner for user input and store in a var to easily access when neeeded.
-        Scanner scanner = new Scanner(System.in);
-        String fileName = "";
-        Student[] students = null;
+    // Initialize scanner for user input and store in a var to easily access when needed.
+    Scanner scanner = new Scanner(System.in);
+    String fileName = "";
+    Student[] students = null;
+    
+    // Menu loop        
+    while (true) {
+        // Print menu options on display
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Student Marks Calculator");
+        System.out.println("Choose task. Enter a number (1-5)");
+        System.out.println("1. Read input from file");
+        System.out.println("2. Print all student details and marks");
+        System.out.println("3. Print students details and marks below the threshold mark");
+        System.out.println("4. Sort marks and filter students by total marks (Top 5 & Bottom 5)");
+        System.out.println("5. Exit");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         
-        // Menu loop        
-        while (true) {
-            // Print menu options on display
-            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.println("Student Marks Calculator");
-            System.out.println("Choose task. Enter a number (1-5)");
-            System.out.println("1. Read input from file");
-            System.out.println("2. Print all student details and marks");
-            System.out.println("3. Print students details and marks below the threshold mark");
-            System.out.println("4. Sort marks and filter students by total marks (Top 5 & Bottom 5)");
-            System.out.println("5. Exit");
-            System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-            
-            // Store user choice
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            
-            // Handle user choice based on the each menu option
-            switch (choice) {
-                case 1:
-                    listFiles();
-                    System.out.println("\nEnter the file name: ");
-                    fileName = scanner.nextLine();
-                    students = readInputFromFile(fileName);
-                    break;
-                case 2:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        printMarks(students);
-                    }
-                    break;
-                case 3:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        System.out.println("Please enter the threshold mark: ");
-                        double thresholdMark = scanner.nextDouble();
-                        filterAndPrintMarksBelowThreshold(students, thresholdMark);
-                    }
-                    break;
-                case 4:
-                    if (students == null) {
-                        System.out.println("Please select a file first.");
-                    } else {
-                        sortMarksAndFilterFiveTopBottomStudents(students);
-                    }
-                    break;
-                case 5:
-                    System.out.println("Exiting the program. Thank you");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid task. Please try again.");
+        int choice = 0;
+        boolean validInput = false;
+        
+        // Handle user input, including non-numeric input
+        while (!validInput) {
+            try {
+                choice = scanner.nextInt();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                scanner.nextLine(); // Clear the invalid input
             }
         }
+        scanner.nextLine(); // Consume the newline character
+        
+        // Handle user choice based on each menu option
+        switch (choice) {
+            case 1:
+                listFiles();
+                System.out.println("\nEnter the file name: ");
+                fileName = scanner.nextLine();
+                students = readInputFromFile(fileName);
+                break;
+            case 2:
+                if (students == null) {
+                    System.out.println("Please select a file first.");
+                } else {
+                    printMarks(students);
+                }
+                break;
+            case 3:
+                if (students == null) {
+                    System.out.println("Please select a file first.");
+                } else {
+                    System.out.println("Please enter the threshold mark: ");
+                    double thresholdMark = 0;
+                    validInput = false;
+                    while (!validInput) {
+                        try {
+                            thresholdMark = scanner.nextDouble();
+                            if (thresholdMark < 0) {
+                                System.out.println("Please enter a valid threshold number above 0");
+                            } else {
+                                validInput = true;
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input. Please enter a valid number for the threshold mark.");
+                            scanner.nextLine(); // Clear the invalid input
+                        }
+                    }
+                    scanner.nextLine(); // Consume the newline character
+                    filterAndPrintMarksBelowThreshold(students, thresholdMark);
+                }
+                break;
+            case 4:
+                if (students == null) {
+                    System.out.println("Please select a file first.");
+                } else {
+                    sortMarksAndFilterFiveTopBottomStudents(students);
+                }
+                break;
+            case 5:
+                System.out.println("Exiting the program. Thank you");
+                System.exit(0);
+            default:
+                System.out.println("Invalid task. Please try again.");
+        }
     }
+}
     
     /**
      * List files available in the project directory.
